@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // Ajuste o caminho conforme a localização real do prisma.js
-const prisma = require("../UnderTimer-Back/src/prisma");
+const prisma = require("../UnderTimer-Biel/src/prisma");
 
 app.get("/creatures", async (req, res) => {
   try {
