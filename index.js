@@ -12,7 +12,7 @@ app.use(express.json());
 // Ajuste o caminho conforme a localização real do prisma.js
 const prisma = require("./src/prisma");
 
-app.get("/creatures", async (req, res) => {
+app.get("/", async (req, res) => {
   try {
     const creatures = await prisma.creature.findMany();
     res.json(creatures);
