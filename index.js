@@ -22,28 +22,13 @@ app.get("/", async (req, res) => {
   }
 });
 
-// app.put("/edit", async (req, res) => {
-//   const { id, lastDeath } = req.body;
-
-//   try {
-//     const updatedCreature = await prisma.creature.update({
-//       where: { id },
-//       data: { lastDeath },
-//     });
-//     res.json(updatedCreature);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: "Erro ao atualizar a criatura" });
-//   }
-// });
-
 app.put("/edit", async (req, res) => {
-  const { id, name } = req.body;
+  const { id, lastDeath } = req.body;
 
   try {
     const updatedCreature = await prisma.creature.update({
       where: { id },
-      data: { name },
+      data: { lastDeath },
     });
     res.json(updatedCreature);
   } catch (error) {
@@ -51,6 +36,21 @@ app.put("/edit", async (req, res) => {
     res.status(500).json({ error: "Erro ao atualizar a criatura" });
   }
 });
+
+// app.put("/edit", async (req, res) => {
+//   const { id, name } = req.body;
+
+//   try {
+//     const updatedCreature = await prisma.creature.update({
+//       where: { id },
+//       data: { name },
+//     });
+//     res.json(updatedCreature);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "Erro ao atualizar a criatura" });
+//   }
+// });
 
 app.listen(3001, () => {
   console.log("API iniciada na porta 3001");
