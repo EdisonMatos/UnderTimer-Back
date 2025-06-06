@@ -22,13 +22,28 @@ app.get("/", async (req, res) => {
   }
 });
 
+// app.put("/edit", async (req, res) => {
+//   const { id, lastDeath } = req.body;
+
+//   try {
+//     const updatedCreature = await prisma.creature.update({
+//       where: { id },
+//       data: { lastDeath },
+//     });
+//     res.json(updatedCreature);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "Erro ao atualizar a criatura" });
+//   }
+// });
+
 app.put("/edit", async (req, res) => {
-  const { id, lastDeath } = req.body;
+  const { id, name } = req.body;
 
   try {
     const updatedCreature = await prisma.creature.update({
       where: { id },
-      data: { lastDeath },
+      data: { name },
     });
     res.json(updatedCreature);
   } catch (error) {
