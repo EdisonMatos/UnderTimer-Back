@@ -16,8 +16,11 @@ datasource db {
 
 model Creature {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  type      String
+  tier      String?
   name      String
-  respawn   Int
+  respawn   Float
+  map       String?
   spriteUrl String
   lastDeath DateTime
   updateAt DateTime @updatedAt
