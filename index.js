@@ -61,7 +61,11 @@ app.post("/instancias", async (req, res) => {
 // READ ALL
 app.get("/instancias", async (req, res) => {
   try {
-    const instancias = await prisma.instancia.findMany();
+    const instancias = await prisma.instancia.findMany({
+      include: {
+        membros: true, // Isso é essencial para trazer os membros da instância
+      },
+    });
     res.json(instancias);
   } catch (error) {
     console.error(error);
