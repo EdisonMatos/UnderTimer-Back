@@ -15,7 +15,7 @@ datasource db {
 }
 
 model Creature {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   type      String
   tier      String?
   name      String
@@ -23,6 +23,21 @@ model Creature {
   map       String?
   spriteUrl String
   lastDeath DateTime
-  updateAt DateTime @updatedAt
+  updateAt  DateTime @updatedAt
 }
 
+model Instancia {
+  id        String             @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  spriteUrl String
+  last      DateTime
+  membros   MembrosInstancia[] @relation(fields: [], references: [])
+}
+
+model MembrosInstancia {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  role        String
+  instanciaId String?  @db.ObjectId
+  instancia   Instancia? @relation(fields: [instanciaId], references: [id])
+}
