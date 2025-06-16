@@ -9,7 +9,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Ajuste o caminho conforme a localização real do prisma.js
 const prisma = require("./src/prisma");
 
 app.get("/", async (req, res) => {
@@ -37,24 +36,6 @@ app.put("/edit", async (req, res) => {
   }
 });
 
-// app.put("/edit", async (req, res) => {
-//   const { id, name } = req.body;
-
-//   try {
-//     const updatedCreature = await prisma.creature.update({
-//       where: { id },
-//       data: { name },
-//     });
-//     res.json(updatedCreature);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: "Erro ao atualizar a criatura" });
-//   }
-// });
-
 app.listen(3001, () => {
   console.log("API iniciada na porta 3001");
 });
-
-
-// subir código
