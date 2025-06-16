@@ -95,21 +95,20 @@ app.get("/instancias/:id", async (req, res) => {
 // UPDATE
 app.put("/instancias/:id", async (req, res) => {
   const { id } = req.params;
-  const { name, creatureId, location, respawnTime } = req.body;
+  const { name, spriteUrl, last } = req.body;
 
   try {
     const instancia = await prisma.instancia.update({
       where: { id },
       data: {
         name,
-        creatureId,
-        location,
-        respawnTime,
+        spriteUrl,
+        last: last ? new Date(last) : undefined,
       },
     });
     res.json(instancia);
   } catch (error) {
-    console.error(error);
+    console.error("Erro ao atualizar instância:", error);
     res.status(500).json({ error: "Erro ao atualizar instância" });
   }
 });
