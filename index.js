@@ -40,20 +40,19 @@ app.put("/edit", async (req, res) => {
 
 // CREATE
 app.post("/instancias", async (req, res) => {
-  const { name, creatureId, location, respawnTime } = req.body;
+  const { name, spriteUrl, last } = req.body;
 
   try {
     const instancia = await prisma.instancia.create({
       data: {
         name,
-        creatureId,
-        location,
-        respawnTime,
+        spriteUrl,
+        last: new Date(last), // garante que o valor enviado como string ISO seja convertido em Date
       },
     });
     res.status(201).json(instancia);
   } catch (error) {
-    console.error(error);
+    console.error("Erro ao criar instância:", error);
     res.status(500).json({ error: "Erro ao criar instância" });
   }
 });
