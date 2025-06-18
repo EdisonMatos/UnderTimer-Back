@@ -6,8 +6,16 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
+
+const authRoutes = require("./authRoutes");
 app.use(express.json());
+app.use(authRoutes);
 
 const prisma = require("./src/prisma");
 

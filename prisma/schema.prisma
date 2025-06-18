@@ -46,7 +46,7 @@ model Guild {
 // MEMBRO: pertence a uma guild, acessa painel específico dela
 model Membro {
   id       String     @id @default(auto()) @map("_id") @db.ObjectId
-  apelido  String
+  apelido  String @unique
   password String
   role     RoleMembro // Agora usa o enum
   guildId  String     @db.ObjectId
