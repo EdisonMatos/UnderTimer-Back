@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -14,30 +8,85 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Creature {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  type      String
-  tier      String?
-  name      String
-  respawn   Float
-  map       String?
-  spriteUrl String
-  lastDeath DateTime
-  updateAt  DateTime @updatedAt
+// Enum para definir os papéis que um membro pode ter na guild
+enum RoleMembro {
+  admin
+  staff
+  membro
 }
 
+enum SubscriptionEnum {
+  active
+  suspended
+  free
+}
+
+// ADMIN: usuário com acesso ao painel principal para criação de guilds
+model Admin {
+  id                 String           @id @default(auto()) @map("_id") @db.ObjectId
+  apelido            String
+  email              String           @unique
+  password           String
+  role               String
+  subscriptionStatus SubscriptionEnum
+  guilds             Guild[] // Um admin pode criar várias guilds
+}
+
+// GUILD: criada por um admin
+model Guild {
+  id         String      @id @default(auto()) @map("_id") @db.ObjectId
+  spriteUrl  String?
+  adminId    String      @db.ObjectId
+  admin      Admin       @relation(fields: [adminId], references: [id])
+  membros    Membro[]
+  instancias Instancia[]
+  monsters   Creature[]
+}
+
+// MEMBRO: pertence a uma guild, acessa painel específico dela
+model Membro {
+  id       String     @id @default(auto()) @map("_id") @db.ObjectId
+  apelido  String
+  password String
+  role     RoleMembro // Agora usa o enum
+  guildId  String     @db.ObjectId
+  guild    Guild      @relation(fields: [guildId], references: [id])
+}
+
+// INSTÂNCIA: criada dentro de uma guild
 model Instancia {
   id        String             @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   spriteUrl String
   last      DateTime
-  membros   MembrosInstancia[] @relation(fields: [], references: [])
+  updatedby String?
+  guildId   String             @db.ObjectId
+  guild     Guild              @relation(fields: [guildId], references: [id])
+  membros   MembrosInstancia[]
 }
 
+// MEMBROS DA INSTÂNCIA: relação entre uma instância e seus participantes
 model MembrosInstancia {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   role        String
-  instanciaId String?  @db.ObjectId
-  instancia   Instancia? @relation(fields: [instanciaId], references: [id])
+  updatedby   String?
+  instanciaId String    @db.ObjectId
+  instancia   Instancia @relation(fields: [instanciaId], references: [id])
+}
+
+// MONSTROS: visíveis na guild, não são globais
+model Creature {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  type      String
+  tier      String?
+  name      String
+  map       String?
+  respawn   Float
+  spriteUrl String
+  lastDeath DateTime
+  updatedby String?
+  updateAt  DateTime @updatedAt
+  guildId   String   @db.ObjectId
+  guild     Guild    @relation(fields: [guildId], references: [id])
 }
