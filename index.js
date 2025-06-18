@@ -59,14 +59,19 @@ app.put("/edit", async (req, res) => {
 
 // CREATE
 app.post("/instancias", async (req, res) => {
-  const { name, spriteUrl, last } = req.body;
+  const { name, spriteUrl, last, guildId } = req.body;
+
+  if (!guildId) {
+    return res.status(400).json({ error: "guildId é obrigatório." });
+  }
 
   try {
     const instancia = await prisma.instancia.create({
       data: {
         name,
         spriteUrl,
-        last: new Date(last), // garante que o valor enviado como string ISO seja convertido em Date
+        last: new Date(last),
+        guildId, // incluído corretamente aqui
       },
     });
     res.status(201).json(instancia);
