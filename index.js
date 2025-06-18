@@ -59,7 +59,7 @@ app.put("/edit", async (req, res) => {
 
 // CREATE
 app.post("/instancias", async (req, res) => {
-  const { name, spriteUrl, last, guildId } = req.body;
+  const { name, spriteUrl, last, guildId, updatedby } = req.body;
 
   if (!guildId) {
     return res.status(400).json({ error: "guildId é obrigatório." });
@@ -71,6 +71,7 @@ app.post("/instancias", async (req, res) => {
         name,
         spriteUrl,
         last: new Date(last),
+        updatedby,
         guildId, // incluído corretamente aqui
       },
     });
