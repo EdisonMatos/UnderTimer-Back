@@ -41,12 +41,12 @@ app.get("/", async (req, res) => {
 });
 
 app.put("/edit", async (req, res) => {
-  const { id, lastDeath } = req.body;
+  const { id, lastDeath, updatedby } = req.body;
 
   try {
     const updatedCreature = await prisma.creature.update({
       where: { id },
-      data: { lastDeath },
+      data: { lastDeath, updatedby },
     });
     res.json(updatedCreature);
   } catch (error) {
