@@ -1,4 +1,5 @@
 const express = require("express"); // CORREÇÃO: aspas necessárias
+const contasCompartilhadasRoutes = require("./ContasCompartilhadas");
 const cors = require("cors");
 const dotenv = require("dotenv");
 
@@ -27,6 +28,7 @@ app.use(
 const authRoutes = require("./authRoutes");
 app.use(express.json());
 app.use(authRoutes);
+app.use(contasCompartilhadasRoutes);
 
 const prisma = require("./src/prisma");
 

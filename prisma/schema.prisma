@@ -41,6 +41,7 @@ model Guild {
   membros    Membro[]
   instancias Instancia[]
   monsters   Creature[]
+  ContaCompartilhadas   ContaCompartilhada[] 
 }
 
 // MEMBRO: pertence a uma guild, acessa painel específico dela
@@ -89,4 +90,17 @@ model Creature {
   updateAt  DateTime @updatedAt
   guildId   String   @db.ObjectId
   guild     Guild    @relation(fields: [guildId], references: [id])
+}
+
+// CONTAS PÚBLICAS
+
+model ContaCompartilhada {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  descricao         String
+  usuario           String
+  senha             String
+  situacaoespecial  String
+  observacao        String
+  guildId           String   @db.ObjectId
+  guild             Guild    @relation(fields: [guildId], references: [id])
 }
