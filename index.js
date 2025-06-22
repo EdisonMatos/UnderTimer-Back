@@ -2,6 +2,7 @@ const express = require("express"); // CORREÇÃO: aspas necessárias
 const contasCompartilhadasRoutes = require("./ContasCompartilhadas");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const axios = require("axios");
 
 dotenv.config();
 
@@ -341,6 +342,23 @@ app.delete("/membrosinstancia/:id", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Erro ao deletar membro da instância" });
+  }
+});
+
+// API RAGNA PROXY
+
+// Proxy para RagnAPI - contorna o problema de CORS
+app.get("/proxy/monster/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const response = await axios.get(
+      `https://ragnapi.com/api/v1/old-times/monsters/${id}`
+    );
+    res.json(response.data);
+  } catch (error) {
+    console.error("Erro ao buscar dados da RagnAPI:", error.message);
+    res.status(500).json({ error: "Erro ao consultar a RagnAPI" });
   }
 });
 
