@@ -32,6 +32,7 @@ app.use(contasCompartilhadasRoutes);
 
 const prisma = require("./src/prisma");
 
+// GET ALL CREATURES
 app.get("/", async (req, res) => {
   try {
     const creatures = await prisma.creature.findMany();
@@ -42,14 +43,38 @@ app.get("/", async (req, res) => {
   }
 });
 
+// UPDATE CREATURE
 app.put("/edit", async (req, res) => {
-  const { id, lastDeath, updatedby } = req.body;
+  const {
+    id,
+    lastDeath,
+    updatedby,
+    type, // novo campo opcional
+    tier, // novo campo opcional
+    name, // novo campo opcional
+    map, // novo campo opcional
+    respawn, // novo campo opcional
+    spriteUrl, // novo campo opcional
+  } = req.body;
 
   try {
     const updatedCreature = await prisma.creature.update({
       where: { id },
-      data: { lastDeath, updatedby },
+      data: {
+        // Campos antigos
+        lastDeath,
+        updatedby,
+
+        // Novos campos (todos opcionais - só atualizam se vierem no body)
+        ...(type !== undefined && { type }),
+        ...(tier !== undefined && { tier }),
+        ...(name !== undefined && { name }),
+        ...(map !== undefined && { map }),
+        ...(respawn !== undefined && { respawn }),
+        ...(spriteUrl !== undefined && { spriteUrl }),
+      },
     });
+
     res.json(updatedCreature);
   } catch (error) {
     console.error(error);
@@ -57,7 +82,79 @@ app.put("/edit", async (req, res) => {
   }
 });
 
+// CREATE CREATURE
+app.post("/creatures", async (req, res) => {
+  const {
+    type,
+    tier,
+    name,
+    map,
+    respawn,
+    spriteUrl,
+    lastDeath,
+    updatedby,
+    guildId,
+  } = req.body;
+
+  try {
+    const creature = await prisma.creature.create({
+      data: {
+        type,
+        tier,
+        name,
+        map,
+        respawn,
+        spriteUrl,
+        lastDeath: new Date(lastDeath),
+        updatedby,
+        guildId,
+      },
+    });
+    res.status(201).json(creature);
+  } catch (error) {
+    console.error("Erro ao criar criatura:", error);
+    res.status(500).json({ error: "Erro ao criar criatura" });
+  }
+});
+
+// READ ONE CREATURE
+app.get("/creatures/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const creature = await prisma.creature.findUnique({
+      where: { id },
+    });
+
+    if (!creature) {
+      return res.status(404).json({ error: "Criatura não encontrada" });
+    }
+
+    res.json(creature);
+  } catch (error) {
+    console.error("Erro ao buscar criatura:", error);
+    res.status(500).json({ error: "Erro ao buscar criatura" });
+  }
+});
+
+// DELETE CREATURE
+app.delete("/creatures/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await prisma.creature.delete({
+      where: { id },
+    });
+    res.status(204).send();
+  } catch (error) {
+    console.error("Erro ao deletar criatura:", error);
+    res.status(500).json({ error: "Erro ao deletar criatura" });
+  }
+});
+
+// ------------------
 // ROTAS CRUD PARA /instancias
+// ------------------
 
 // CREATE
 app.post("/instancias", async (req, res) => {
@@ -74,7 +171,7 @@ app.post("/instancias", async (req, res) => {
         spriteUrl,
         last: new Date(last),
         updatedby,
-        guildId, // incluído corretamente aqui
+        guildId,
       },
     });
     res.status(201).json(instancia);
@@ -89,7 +186,7 @@ app.get("/instancias", async (req, res) => {
   try {
     const instancias = await prisma.instancia.findMany({
       include: {
-        membros: true, // Isso é essencial para trazer os membros da instância
+        membros: true,
       },
     });
     res.json(instancias);
@@ -155,7 +252,9 @@ app.delete("/instancias/:id", async (req, res) => {
   }
 });
 
+// ------------------
 // ROTAS CRUD PARA /membrosinstancia
+// ------------------
 
 // CREATE
 app.post("/membrosinstancia", async (req, res) => {
