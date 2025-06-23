@@ -27,9 +27,16 @@ app.use(
 );
 
 const authRoutes = require("./authRoutes");
+const adminRoutes = require("./admins");
+const guildRoutes = require("./guilds");
+const membroRoutes = require("./membros");
+
 app.use(express.json());
 app.use(authRoutes);
 app.use(contasCompartilhadasRoutes);
+app.use(adminRoutes);
+app.use(guildRoutes);
+app.use(membroRoutes);
 
 const prisma = require("./src/prisma");
 
