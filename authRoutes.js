@@ -19,11 +19,7 @@ router.post("/login/members", async (req, res) => {
       return res.status(401).json({ error: "Membro não encontrado" });
     }
 
-    // Se estiver usando senha em texto puro:
     const isValid = password === membro.password;
-
-    // Se estiver usando senha criptografada (recomendado):
-    // const isValid = await bcrypt.compare(password, membro.password);
 
     if (!isValid) {
       return res.status(401).json({ error: "Senha inválida" });
@@ -51,6 +47,53 @@ router.post("/login/members", async (req, res) => {
     });
   } catch (error) {
     console.error("Erro no login de membro:", error);
+    res.status(500).json({ error: "Erro no login" });
+  }
+});
+
+// ROTA DE LOGIN PARA ADMINS
+router.post("/login/admins", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const admin = await prisma.admin.findUnique({
+      where: { email },
+    });
+
+    if (!admin) {
+      return res.status(401).json({ error: "Admin não encontrado" });
+    }
+
+    const isValid = password === admin.password;
+
+    if (!isValid) {
+      return res.status(401).json({ error: "Senha inválida" });
+    }
+
+    const token = jwt.sign(
+      {
+        id: admin.id,
+        email: admin.email,
+        apelido: admin.apelido,
+        role: admin.role,
+        subscriptionStatus: admin.subscriptionStatus,
+      },
+      JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    res.json({
+      token,
+      admin: {
+        id: admin.id,
+        email: admin.email,
+        apelido: admin.apelido,
+        role: admin.role,
+        subscriptionStatus: admin.subscriptionStatus,
+      },
+    });
+  } catch (error) {
+    console.error("Erro no login de admin:", error);
     res.status(500).json({ error: "Erro no login" });
   }
 });
