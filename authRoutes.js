@@ -43,6 +43,9 @@ router.post("/login/members", async (req, res) => {
         apelido: membro.apelido,
         role: membro.role,
         guildId: membro.guildId,
+        guild: {
+          spriteUrl: membro.guild?.spriteUrl || null,
+        },
       },
     });
   } catch (error) {
