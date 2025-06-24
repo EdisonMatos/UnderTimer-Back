@@ -13,6 +13,7 @@ router.post("/login/members", async (req, res) => {
   try {
     const membro = await prisma.membro.findUnique({
       where: { apelido },
+      include: { guild: true },
     });
 
     if (!membro) {
@@ -44,7 +45,7 @@ router.post("/login/members", async (req, res) => {
         role: membro.role,
         guildId: membro.guildId,
         guild: {
-          spriteUrl: membro.guild?.spriteUrl || null,
+          spriteUrl: membro.guild?.spriteUrl || "",
         },
       },
     });
