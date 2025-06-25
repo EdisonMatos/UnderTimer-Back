@@ -35,6 +35,7 @@ model Admin {
 // GUILD: criada por um admin
 model Guild {
   id         String      @id @default(auto()) @map("_id") @db.ObjectId
+  name       String?
   spriteUrl  String?
   adminId    String      @db.ObjectId
   admin      Admin       @relation(fields: [adminId], references: [id])
@@ -64,6 +65,7 @@ model Instancia {
   guildId   String             @db.ObjectId
   guild     Guild              @relation(fields: [guildId], references: [id])
   membros   MembrosInstancia[]
+  loots     LootInstancia[]   // nova relação adicionada aqui
 }
 
 // MEMBROS DA INSTÂNCIA: relação entre uma instância e seus participantes
@@ -103,4 +105,14 @@ model ContaCompartilhada {
   observacao        String
   guildId           String   @db.ObjectId
   guild             Guild    @relation(fields: [guildId], references: [id])
+}
+
+model LootInstancia {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  updatedby   String?
+  preco       Float?
+  observacao  String?
+  instanciaId String    @db.ObjectId
+  instancia   Instancia @relation(fields: [instanciaId], references: [id])
 }
