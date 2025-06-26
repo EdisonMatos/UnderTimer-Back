@@ -168,7 +168,7 @@ app.delete("/creatures/:id", async (req, res) => {
 
 // CREATE
 app.post("/instancias", async (req, res) => {
-  const { name, spriteUrl, last, guildId, updatedby } = req.body;
+  const { name, spriteUrl, last, guildId, observacoes, updatedby } = req.body;
 
   if (!guildId) {
     return res.status(400).json({ error: "guildId é obrigatório." });
@@ -181,6 +181,7 @@ app.post("/instancias", async (req, res) => {
         spriteUrl,
         last: new Date(last),
         updatedby,
+        observacoes,
         guildId,
       },
     });
@@ -229,7 +230,7 @@ app.get("/instancias/:id", async (req, res) => {
 // UPDATE
 app.put("/instancias/:id", async (req, res) => {
   const { id } = req.params;
-  const { name, spriteUrl, last } = req.body;
+  const { name, spriteUrl, last, observacoes } = req.body;
 
   try {
     const instancia = await prisma.instancia.update({
@@ -237,6 +238,7 @@ app.put("/instancias/:id", async (req, res) => {
       data: {
         name,
         spriteUrl,
+        observacoes,
         last: last ? new Date(last) : undefined,
       },
     });
@@ -268,13 +270,14 @@ app.delete("/instancias/:id", async (req, res) => {
 
 // CREATE
 app.post("/membrosinstancia", async (req, res) => {
-  const { name, role, instanciaId } = req.body;
+  const { name, role, instanciaId, observacoes } = req.body;
 
   try {
     const membro = await prisma.membrosInstancia.create({
       data: {
         name,
         role,
+        observacoes,
         instancia: instanciaId ? { connect: { id: instanciaId } } : undefined,
       },
     });
@@ -321,7 +324,7 @@ app.get("/membrosinstancia/:id", async (req, res) => {
 // UPDATE
 app.put("/membrosinstancia/:id", async (req, res) => {
   const { id } = req.params;
-  const { name, role, instanciaId } = req.body;
+  const { name, role, instanciaId, observacoes } = req.body;
 
   try {
     const membro = await prisma.membrosInstancia.update({
@@ -329,6 +332,7 @@ app.put("/membrosinstancia/:id", async (req, res) => {
       data: {
         name,
         role,
+        observacoes,
         instancia: instanciaId ? { connect: { id: instanciaId } } : undefined,
       },
     });
