@@ -4,7 +4,8 @@ const prisma = require("./src/prisma");
 
 // CREATE
 router.post("/lootinstancia", async (req, res) => {
-  const { name, updatedby, preco, observacao, instanciaId } = req.body;
+  const { name, updatedby, preco, observacao, interesse, instanciaId } =
+    req.body;
 
   if (!instanciaId) {
     return res.status(400).json({ error: "instanciaId é obrigatório." });
@@ -18,6 +19,7 @@ router.post("/lootinstancia", async (req, res) => {
         preco,
         observacao,
         instanciaId,
+        interesse,
       },
     });
     res.status(201).json(loot);
@@ -63,7 +65,7 @@ router.get("/lootinstancia/:id", async (req, res) => {
 // UPDATE
 router.put("/lootinstancia/:id", async (req, res) => {
   const { id } = req.params;
-  const { name, updatedby, preco, observacao } = req.body;
+  const { name, updatedby, preco, observacao, interesse } = req.body;
 
   try {
     const loot = await prisma.lootInstancia.update({
@@ -73,6 +75,7 @@ router.put("/lootinstancia/:id", async (req, res) => {
         updatedby,
         preco,
         observacao,
+        interesse,
       },
     });
     res.json(loot);

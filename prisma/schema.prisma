@@ -114,6 +114,7 @@ model LootInstancia {
   name        String
   updatedby   String?
   preco       Float?
+  interesse        String?
   observacao  String?
   instanciaId String    @db.ObjectId
   instancia   Instancia @relation(fields: [instanciaId], references: [id])
