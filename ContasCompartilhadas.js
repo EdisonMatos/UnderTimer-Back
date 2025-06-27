@@ -4,8 +4,15 @@ const prisma = require("./src/prisma");
 
 // CREATE
 router.post("/contascompartilhadas", async (req, res) => {
-  const { descricao, usuario, senha, situacaoespecial, observacao, guildId } =
-    req.body;
+  const {
+    descricao,
+    usuario,
+    senha,
+    situacaoespecial,
+    updateAt,
+    observacao,
+    guildId,
+  } = req.body;
 
   if (!guildId) {
     return res.status(400).json({ error: "guildId é obrigatório." });
@@ -20,6 +27,7 @@ router.post("/contascompartilhadas", async (req, res) => {
         situacaoespecial,
         observacao,
         guildId,
+        updateAt,
       },
     });
     res.status(201).json(conta);
@@ -65,7 +73,8 @@ router.get("/contascompartilhadas/:id", async (req, res) => {
 // UPDATE
 router.put("/contascompartilhadas/:id", async (req, res) => {
   const { id } = req.params;
-  const { descricao, usuario, senha, situacaoespecial, observacao } = req.body;
+  const { descricao, usuario, senha, situacaoespecial, updateAt, observacao } =
+    req.body;
 
   try {
     const conta = await prisma.contaCompartilhada.update({
@@ -76,6 +85,7 @@ router.put("/contascompartilhadas/:id", async (req, res) => {
         senha,
         situacaoespecial,
         observacao,
+        updateAt,
       },
     });
     res.json(conta);
