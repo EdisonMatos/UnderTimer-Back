@@ -105,6 +105,7 @@ model ContaCompartilhada {
   senha             String
   situacaoespecial  String
   observacao        String
+  updateAt  DateTime @updatedAt
   guildId           String   @db.ObjectId
   guild             Guild    @relation(fields: [guildId], references: [id])
 }
