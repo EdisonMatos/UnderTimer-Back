@@ -10,9 +10,11 @@ datasource db {
 
 // Enum para definir os papéis que um membro pode ter na guild
 enum RoleMembro {
-  admin
-  staff
+  novato
   membro
+  veterano
+  staff
+  guildmaster
 }
 
 enum SubscriptionEnum {
