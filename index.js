@@ -168,7 +168,15 @@ app.delete("/creatures/:id", async (req, res) => {
 
 // CREATE
 app.post("/instancias", async (req, res) => {
-  const { name, spriteUrl, last, guildId, observacoes, updatedby } = req.body;
+  const {
+    name,
+    spriteUrl,
+    last,
+    guildId,
+    observacoes,
+    updatedby,
+    gerenciadapor,
+  } = req.body;
 
   if (!guildId) {
     return res.status(400).json({ error: "guildId é obrigatório." });
@@ -182,6 +190,7 @@ app.post("/instancias", async (req, res) => {
         last: new Date(last),
         updatedby,
         observacoes,
+        gerenciadapor,
         guildId,
       },
     });
@@ -230,7 +239,7 @@ app.get("/instancias/:id", async (req, res) => {
 // UPDATE
 app.put("/instancias/:id", async (req, res) => {
   const { id } = req.params;
-  const { name, spriteUrl, last, observacoes } = req.body;
+  const { name, spriteUrl, last, observacoes, gerenciadapor } = req.body;
 
   try {
     const instancia = await prisma.instancia.update({
@@ -239,6 +248,7 @@ app.put("/instancias/:id", async (req, res) => {
         name,
         spriteUrl,
         observacoes,
+        gerenciadapor,
         last: last ? new Date(last) : undefined,
       },
     });

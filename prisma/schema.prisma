@@ -64,6 +64,7 @@ model Instancia {
   spriteUrl String
   last      DateTime
   updatedby String?
+  gerenciadapor String?
   observacoes String?
   guildId   String             @db.ObjectId
   guild     Guild              @relation(fields: [guildId], references: [id])
