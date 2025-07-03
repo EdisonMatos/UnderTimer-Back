@@ -10,6 +10,7 @@ datasource db {
 
 // Enum para definir os papéis que um membro pode ter na guild
 enum RoleMembro {
+  visitante
   novato
   membro
   veterano
