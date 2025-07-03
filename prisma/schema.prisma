@@ -77,6 +77,7 @@ model MembrosInstancia {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   role        String
+  confirmadopor String?
   observacoes String?
   updatedby   String?
   instanciaId String    @db.ObjectId
