@@ -280,7 +280,7 @@ app.delete("/instancias/:id", async (req, res) => {
 
 // CREATE
 app.post("/membrosinstancia", async (req, res) => {
-  const { name, role, instanciaId, observacoes } = req.body;
+  const { name, role, instanciaId, observacoes, confirmadopor } = req.body;
 
   try {
     const membro = await prisma.membrosInstancia.create({
@@ -288,6 +288,7 @@ app.post("/membrosinstancia", async (req, res) => {
         name,
         role,
         observacoes,
+        confirmadopor,
         instancia: instanciaId ? { connect: { id: instanciaId } } : undefined,
       },
     });
@@ -334,7 +335,7 @@ app.get("/membrosinstancia/:id", async (req, res) => {
 // UPDATE
 app.put("/membrosinstancia/:id", async (req, res) => {
   const { id } = req.params;
-  const { name, role, instanciaId, observacoes } = req.body;
+  const { name, role, instanciaId, observacoes, confirmadopor } = req.body;
 
   try {
     const membro = await prisma.membrosInstancia.update({
@@ -343,6 +344,7 @@ app.put("/membrosinstancia/:id", async (req, res) => {
         name,
         role,
         observacoes,
+        confirmadopor,
         instancia: instanciaId ? { connect: { id: instanciaId } } : undefined,
       },
     });
